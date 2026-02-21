@@ -3,7 +3,7 @@ import hashlib
 import os
 
 # ===== CONFIGURAÇÕES =====
-URL_MONITORADA = "COLE_AQUI_A_URL_DA_IMOBILIARIA"
+URL_MONITORADA = "https://www.nilsonimoveis.com/aluguel/apartamento/lavras/todos-os-bairros/todos-os-condominios/todas-as-opcoes/?valor_min=2.000,00&valor_max=2.500,00&pagina=1&ordenacao=desc"
 TOKEN = os.environ["TELEGRAM_TOKEN"]
 CHAT_ID = os.environ["TELEGRAM_CHAT_ID"]
 ARQUIVO_ESTADO = "estado.txt"
