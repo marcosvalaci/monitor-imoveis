@@ -25,7 +25,21 @@ def enviar_telegram(mensagem):
     requests.post(url, data=payload, timeout=30)
 
 def main():
-    enviar_telegram("✅ Teste: monitor de imóveis funcionando!")
-    return
+    conteudo = pegar_conteudo()
+    hash_atual = hash_conteudo(conteudo)
+
+    if os.path.exists(ARQUIVO_ESTADO):
+        with open(ARQUIVO_ESTADO, "r") as f:
+            hash_antigo = f.read().strip()
+    else:
+        hash_antigo = None
+
+    if hash_antigo and hash_antigo != hash_atual:
+        enviar_telegram(
+            "🚨 Novo imóvel detectado!\n\nConfira:\n" + URL_MONITORADA
+        )
+
+    with open(ARQUIVO_ESTADO, "w") as f:
+        f.write(hash_atual)
 if __name__ == "__main__":
     main()
