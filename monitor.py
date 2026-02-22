@@ -20,9 +20,13 @@ TOKEN = os.environ["TELEGRAM_TOKEN"]
 ARQUIVO_ESTADO = "estado.txt"
 
 def pegar_conteudo(url):
-    r = requests.get(url, timeout=30)
-    r.raise_for_status()
-    return r.text
+    try:
+        r = requests.get(url, timeout=30)
+        r.raise_for_status()
+        return r.text
+    except requests.exceptions.RequestException as e:
+        print(f"[ERRO] Falha ao acessar {url}: {e}")
+        return None
 
 def hash_conteudo(conteudo):
     return hashlib.md5(conteudo.encode("utf-8")).hexdigest()
@@ -41,8 +45,11 @@ def nome_arquivo_estado(nome_site):
 def main():
     for nome_site, url in SITES_MONITORADOS.items():
         conteudo = pegar_conteudo(url)
-        hash_atual = hash_conteudo(conteudo)
 
+        if conteudo is None:
+            continue  # pula esse site e segue o próximo
+
+        hash_atual = hash_conteudo(conteudo)
         arquivo_estado = nome_arquivo_estado(nome_site)
 
         if os.path.exists(arquivo_estado):
